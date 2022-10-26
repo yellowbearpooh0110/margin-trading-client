@@ -12,7 +12,7 @@ import axios from 'axios';
 import SocketProvider from 'providers/SocketProvider';
 import { apiUrl } from 'config';
 
-axios.defaults.baseURL = `${apiUrl}/api/`;
+axios.defaults.baseURL = `${apiUrl}api/`;
 
 ReactDOM.render(
   <HelmetProvider>

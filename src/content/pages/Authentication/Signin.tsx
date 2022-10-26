@@ -108,7 +108,7 @@ const Signin: React.FC = () => {
                   />
                   <Button variant="outlined">Sign in</Button>
                 </Stack> */}
-                <Button variant="outlined" href={`${apiUrl}/oauth/google`}>
+                <Button variant="outlined" href={`${apiUrl}oauth/google`}>
                   <GoogleIcon sx={{ mr: 1 }} />
                   Sign In With Google
                 </Button>
