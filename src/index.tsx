@@ -10,8 +10,9 @@ import * as serviceWorker from 'serviceWorker';
 import AuthProvider from './providers/AuthProvider';
 import axios from 'axios';
 import SocketProvider from 'providers/SocketProvider';
+import { apiUrl } from 'config';
 
-axios.defaults.baseURL = 'http://localhost:8080/api/';
+axios.defaults.baseURL = `${apiUrl}/api/`;
 
 ReactDOM.render(
   <HelmetProvider>
