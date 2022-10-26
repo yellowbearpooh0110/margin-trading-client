@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import * as React from 'react';
 
 import { Helmet } from 'react-helmet-async';
 
@@ -8,7 +8,7 @@ import SidebarContent from './SidebarContent';
 import ChatContent from './ChatContent';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 
-import Scrollbar from 'src/components/Scrollbar';
+import Scrollbar from 'components/Scrollbar';
 
 import {
   Box,
@@ -18,6 +18,7 @@ import {
   IconButton,
   useTheme
 } from '@mui/material';
+import { useSocket } from 'providers/SocketProvider';
 
 const RootWrapper = styled(Box)(
   ({ theme }) => `
@@ -75,11 +76,17 @@ const DrawerWrapperMobile = styled(Drawer)(
 
 function ApplicationsMessenger() {
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const { socket } = useSocket();
+
+  React.useEffect(() => {
+    socket.emit('joinRoom', { username: 'test-name', roomname: 'test-room' });
+  });
 
   return (
     <>

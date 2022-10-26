@@ -1,11 +1,9 @@
 import { Typography, Avatar, Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { useAuth } from 'providers/AuthProvider';
 
 function PageHeader() {
-  const user = {
-    name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg'
-  };
+  const { authState } = useAuth();
   const theme = useTheme();
 
   return (
@@ -18,13 +16,13 @@ function PageHeader() {
             height: theme.spacing(8)
           }}
           variant="rounded"
-          alt={user.name}
-          src={user.avatar}
+          alt={authState.name}
+          src={authState.avatar}
         />
       </Grid>
       <Grid item>
         <Typography variant="h3" component="h3" gutterBottom>
-          Welcome, {user.name}!
+          Welcome, {authState.name}!
         </Typography>
         <Typography variant="subtitle2">
           Today is a good day to start trading crypto assets!

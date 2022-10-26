@@ -328,7 +328,6 @@ export const PureLightTheme = createTheme({
         root: {
           backgroundColor: alpha(darken(themeColors.primaryAlt, 0.4), 0.2),
           backdropFilter: 'blur(2px)',
-
           '&.MuiBackdrop-invisible': {
             backgroundColor: 'transparent',
             backdropFilter: 'blur(2px)'
@@ -482,14 +481,12 @@ export const PureLightTheme = createTheme({
         colorSecondary: {
           background: colors.alpha.black[5],
           color: colors.alpha.black[100],
-
           '&:hover': {
             background: colors.alpha.black[10]
           }
         },
         deleteIcon: {
           color: colors.error.light,
-
           '&:hover': {
             color: colors.error.main
           }
@@ -500,7 +497,6 @@ export const PureLightTheme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: 'none',
-
           '&.Mui-expanded': {
             margin: 0
           },
@@ -532,7 +528,6 @@ export const PureLightTheme = createTheme({
           fontSize: 13,
           color: colors.alpha.black[70],
           fontWeight: 'bold',
-
           '&:first-of-type': {
             border: 0,
             background: 'transparent'
@@ -569,7 +564,7 @@ export const PureLightTheme = createTheme({
     },
     MuiButton: {
       defaultProps: {
-        disableRipple: false
+        disableRipple: true
       },
       styleOverrides: {
         root: {
@@ -577,7 +572,6 @@ export const PureLightTheme = createTheme({
           textTransform: 'none',
           paddingLeft: 16,
           paddingRight: 16,
-
           '.MuiSvgIcon-root': {
             transition: 'all .2s'
           }
@@ -592,7 +586,6 @@ export const PureLightTheme = createTheme({
         },
         outlinedSecondary: {
           backgroundColor: colors.alpha.white[100],
-
           '&:hover, &.MuiSelected': {
             backgroundColor: colors.alpha.black[5],
             color: colors.alpha.black[100]
@@ -638,7 +631,6 @@ export const PureLightTheme = createTheme({
           color: colors.primary.main,
           background: colors.alpha.white[100],
           transition: 'all .2s',
-
           '&:hover, &.Mui-selected, &.Mui-selected:hover': {
             color: colors.alpha.white[100],
             background: colors.primary.main
@@ -651,7 +643,6 @@ export const PureLightTheme = createTheme({
         root: {
           // borderRadius: 8,
           padding: 8
-
           // '& .MuiTouchRipple-root': {
           //   borderRadius: 8
           // }
@@ -687,7 +678,6 @@ export const PureLightTheme = createTheme({
         vertical: {
           height: 'auto',
           width: 1,
-
           '&.MuiDivider-flexItem.MuiDivider-fullWidth': {
             height: 'auto'
           },
@@ -764,14 +754,11 @@ export const PureLightTheme = createTheme({
       styleOverrides: {
         root: {
           padding: 0,
-
           '& .MuiListItem-button': {
             transition: 'all .2s',
-
             '& > .MuiSvgIcon-root': {
               minWidth: 34
             },
-
             '& .MuiTouchRipple-root': {
               opacity: 0.2
             }
@@ -788,7 +775,6 @@ export const PureLightTheme = createTheme({
         },
         padding: {
           padding: '12px',
-
           '& .MuiListItem-button': {
             borderRadius: 6,
             margin: '1px 0'
@@ -824,7 +810,6 @@ export const PureLightTheme = createTheme({
           borderRadius: 6,
           transition: 'color .2s',
           textTransform: 'capitalize',
-
           '&.MuiButtonBase-root': {
             minWidth: 'auto',
             paddingLeft: 20,
@@ -848,18 +833,15 @@ export const PureLightTheme = createTheme({
         },
         list: {
           padding: 12,
-
           '& .MuiMenuItem-root.MuiButtonBase-root': {
             fontSize: 14,
             marginTop: 1,
             marginBottom: 1,
             transition: 'all .2s',
             color: colors.alpha.black[70],
-
             '& .MuiTouchRipple-root': {
               opacity: 0.2
             },
-
             '&:hover, &:active, &.active, &.Mui-selected': {
               color: colors.alpha.black[100],
               background: alpha(colors.primary.lighter, 0.4)
@@ -873,7 +855,6 @@ export const PureLightTheme = createTheme({
         root: {
           background: 'transparent',
           transition: 'all .2s',
-
           '&:hover, &:active, &.active, &.Mui-selected': {
             color: colors.alpha.black[100],
             background: alpha(colors.primary.lighter, 0.4)
@@ -889,7 +870,6 @@ export const PureLightTheme = createTheme({
         root: {
           '&.MuiButtonBase-root': {
             color: colors.secondary.main,
-
             '&:hover, &:active, &.active, &.Mui-selected': {
               color: colors.alpha.black[100],
               background: lighten(colors.primary.lighter, 0.5)
@@ -913,7 +893,6 @@ export const PureLightTheme = createTheme({
           background: colors.error.lighter,
           color: colors.error.main,
           marginRight: 8,
-
           '&:hover': {
             background: colors.error.lighter,
             color: colors.error.dark
@@ -921,7 +900,6 @@ export const PureLightTheme = createTheme({
         },
         popupIndicator: {
           color: colors.alpha.black[50],
-
           '&:hover': {
             background: colors.primary.lighter,
             color: colors.primary.main
@@ -958,7 +936,6 @@ export const PureLightTheme = createTheme({
         },
         root: {
           transition: 'background-color .2s',
-
           '&.MuiTableRow-hover:hover': {
             backgroundColor: colors.alpha.black[5]
           }
@@ -1029,7 +1006,6 @@ export const PureLightTheme = createTheme({
         root: {
           minHeight: 0,
           padding: '8px 0',
-
           '&:before': {
             display: 'none'
           }
@@ -1058,7 +1034,6 @@ export const PureLightTheme = createTheme({
         root: {
           height: 33,
           overflow: 'visible',
-
           '& .MuiButtonBase-root': {
             position: 'absolute',
             padding: 6,
@@ -1090,7 +1065,6 @@ export const PureLightTheme = createTheme({
           '& .MuiSwitch-thumb': {
             backgroundColor: colors.alpha.white[100]
           },
-
           '&.Mui-checked .MuiSwitch-thumb': {
             backgroundColor: colors.primary.main
           }

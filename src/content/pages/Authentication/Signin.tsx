@@ -4,24 +4,19 @@ import {
   Card,
   Typography,
   Container,
-  Divider,
   Button,
   FormControl,
-  OutlinedInput,
-  InputAdornment,
-  TextField,
-  IconButton
+  Dialog
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import {
-  Email as EmailIcon,
-  Key as KeyIcon,
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon
-} from '@mui/icons-material';
+import { Google as GoogleIcon } from '@mui/icons-material';
 
 import { styled } from '@mui/material/styles';
 import { Stack } from '@mui/system';
+import { useLocation } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from 'providers/AuthProvider';
 
 const MainContent = styled(Box)(
   ({ theme }) => `
@@ -35,23 +30,22 @@ const MainContent = styled(Box)(
 `
 );
 
-const OutlinedInputWrapper = styled(OutlinedInput)(
-  ({ theme }) => `
-    background-color: ${theme.colors.alpha.white[100]};
-`
-);
-
-const ButtonSearch = styled(Button)(
-  ({ theme }) => `
-    margin-right: -${theme.spacing(1)};
-`
-);
-
 const Signin: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const { setAuthState } = useAuth();
+  React.useEffect(() => {
+    const jwtToken = searchParams.get('token');
+    if (jwtToken) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+      setAuthState({ jwtToken });
+    }
+  }, [searchParams]);
+  const [open, setOpen] = React.useState<boolean>(false);
+
   return (
     <>
       <Helmet>
-        <title>Signin</title>
+        <title>Sign In</title>
       </Helmet>
       <MainContent>
         <Container maxWidth="md">
@@ -71,7 +65,7 @@ const Signin: React.FC = () => {
           <Container maxWidth="sm">
             <Card sx={{ textAlign: 'center', mt: 3, p: [1, 4] }}>
               <FormControl variant="outlined" fullWidth>
-                <Stack spacing={2}>
+                {/* <Stack spacing={2}>
                   <TextField
                     required
                     id="outlined-required"
@@ -112,7 +106,33 @@ const Signin: React.FC = () => {
                     }}
                   />
                   <Button variant="outlined">Sign in</Button>
-                </Stack>
+                </Stack> */}
+                <Button
+                  variant="outlined"
+                  href="http://localhost:8080/oauth/google"
+                >
+                  <GoogleIcon sx={{ mr: 1 }} />
+                  Sign In With Google
+                </Button>
+                <Button
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setOpen((_prev) => !_prev);
+                  }}
+                >
+                  Test
+                </Button>
+                <Dialog
+                  keepMounted
+                  maxWidth="sm"
+                  fullWidth
+                  open={open}
+                  onClose={() => {
+                    setOpen(false);
+                  }}
+                >
+                  Test
+                </Dialog>
               </FormControl>
             </Card>
           </Container>
