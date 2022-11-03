@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export type AuthStateType = {
   loggedIn?: boolean;
+  id?: string;
   name?: string;
   avatar?: string;
   email?: string;

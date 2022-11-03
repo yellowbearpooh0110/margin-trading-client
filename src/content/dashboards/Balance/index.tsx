@@ -5,15 +5,13 @@ import { Container, Grid } from '@mui/material';
 import Footer from 'components/Footer';
 
 import AccountBalance from './AccountBalance';
-import Wallets from './Wallets';
-import AccountSecurity from './AccountSecurity';
-import WatchList from './WatchList';
+import Deposit from './Deposit';
 
-function DashboardCrypto() {
+function DashboardBalance() {
   return (
     <>
       <Helmet>
-        <title>Crypto Dashboard</title>
+        <title>Balance Dashboard</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader />
@@ -29,7 +27,10 @@ function DashboardCrypto() {
           <Grid item xs={12}>
             <AccountBalance />
           </Grid>
-          <Grid item lg={8} xs={12}>
+          <Grid item xs={12}>
+            <Deposit />
+          </Grid>
+          {/* <Grid item lg={8} xs={12}>
             <Wallets />
           </Grid>
           <Grid item lg={4} xs={12}>
@@ -37,7 +38,7 @@ function DashboardCrypto() {
           </Grid>
           <Grid item xs={12}>
             <WatchList />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
       <Footer />
@@ -45,4 +46,4 @@ function DashboardCrypto() {
   );
 }
 
-export default DashboardCrypto;
+export default DashboardBalance;

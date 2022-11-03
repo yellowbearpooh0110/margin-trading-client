@@ -14,7 +14,7 @@ import { SidebarContext } from 'contexts/SidebarContext';
 
 import DesignServicesTwoToneIcon from '@mui/icons-material/DesignServicesTwoTone';
 import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
-import MmsTwoToneIcon from '@mui/icons-material/MmsTwoTone';
+import { CurrencyExchangeTwoTone as CurrencyExchangeTwoToneIcon } from '@mui/icons-material';
 import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import BallotTwoToneIcon from '@mui/icons-material/BallotTwoTone';
@@ -212,10 +212,10 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/dashboards/crypto"
+                  to="/dashboards/balance"
                   startIcon={<BrightnessLowTwoToneIcon />}
                 >
-                  Cryptocurrency
+                  Balance
                 </Button>
               </ListItem>
               <ListItem component="div">
@@ -223,10 +223,10 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/dashboards/messenger"
-                  startIcon={<MmsTwoToneIcon />}
+                  to="/dashboards/trading"
+                  startIcon={<CurrencyExchangeTwoToneIcon />}
                 >
-                  Messenger
+                  Trading
                 </Button>
               </ListItem>
             </List>

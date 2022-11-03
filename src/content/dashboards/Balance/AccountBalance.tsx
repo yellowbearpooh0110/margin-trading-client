@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   Button,
   Card,
@@ -18,16 +19,7 @@ import TrendingUp from '@mui/icons-material/TrendingUp';
 import Text from 'components/Text';
 import Chart from 'react-apexcharts';
 import type { ApexOptions } from 'apexcharts';
-
-const AvatarSuccess = styled(Avatar)(
-  ({ theme }) => `
-      background-color: ${theme.colors.success.main};
-      color: ${theme.palette.success.contrastText};
-      width: ${theme.spacing(8)};
-      height: ${theme.spacing(8)};
-      box-shadow: ${theme.colors.shadows.success};
-`
-);
+import AxiosService from 'services/axios';
 
 const ListItemAvatarWrapper = styled(ListItemAvatar)(
   ({ theme }) => `
@@ -55,7 +47,11 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
 `
 );
 
-function AccountBalance() {
+const AccountBalance: React.FC = () => {
+  const [balance, setBalance] = React.useState<AxiosService.UserBalanceType>();
+  React.useEffect(() => {
+    AxiosService.getUserBalance().then((res) => setBalance(res));
+  }, []);
   const theme = useTheme();
 
   const chartOptions: ApexOptions = {
@@ -140,40 +136,6 @@ function AccountBalance() {
             >
               Account Balance
             </Typography>
-            <Box>
-              <Typography variant="h1" gutterBottom>
-                $54,584.23
-              </Typography>
-              <Typography
-                variant="h4"
-                fontWeight="normal"
-                color="text.secondary"
-              >
-                1.0045983485234 BTC
-              </Typography>
-              <Box
-                display="flex"
-                sx={{
-                  py: 4
-                }}
-                alignItems="center"
-              >
-                <AvatarSuccess
-                  sx={{
-                    mr: 2
-                  }}
-                  variant="rounded"
-                >
-                  <TrendingUp fontSize="large" />
-                </AvatarSuccess>
-                <Box>
-                  <Typography variant="h4">+ $3,594.00</Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    this month
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
             <Grid container spacing={3}>
               <Grid sm item>
                 <Button fullWidth variant="outlined">
@@ -198,32 +160,9 @@ function AccountBalance() {
           xs={12}
           md={6}
         >
-          <Box
-            component="span"
-            sx={{
-              display: { xs: 'none', md: 'inline-block' }
-            }}
-          >
-            <Divider absolute orientation="vertical" />
-          </Box>
-          <Box py={4} pr={4} flex={1}>
-            <Grid container spacing={0}>
-              <Grid
-                xs={12}
-                sm={5}
-                item
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Chart
-                  height={250}
-                  options={chartOptions}
-                  series={chartSeries}
-                  type="donut"
-                />
-              </Grid>
-              <Grid xs={12} sm={7} item display="flex" alignItems="center">
+          <Box py={4} px={4} flex={1}>
+            <Grid container spacing={1}>
+              <Grid xs={12} sm={12} item display="flex" alignItems="center">
                 <List
                   disablePadding
                   sx={{
@@ -248,7 +187,7 @@ function AccountBalance() {
                     />
                     <Box>
                       <Typography align="right" variant="h4" noWrap>
-                        20%
+                        {balance?.btc}
                       </Typography>
                       <Text color="success">+2.54%</Text>
                     </Box>
@@ -256,14 +195,14 @@ function AccountBalance() {
                   <ListItem disableGutters>
                     <ListItemAvatarWrapper>
                       <img
-                        alt="XRP"
-                        src="/static/images/placeholders/logo/ripple.png"
+                        alt="ETH"
+                        src="/static/images/placeholders/logo/ethereum.png"
                       />
                     </ListItemAvatarWrapper>
                     <ListItemText
-                      primary="XRP"
+                      primary="ETH"
                       primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary="Ripple"
+                      secondary="Ethereum"
                       secondaryTypographyProps={{
                         variant: 'subtitle2',
                         noWrap: true
@@ -330,6 +269,6 @@ function AccountBalance() {
       </Grid>
     </Card>
   );
-}
+};
 
 export default AccountBalance;

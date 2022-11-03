@@ -21,10 +21,12 @@ const App: React.FC = () => {
         .then((user) => {
           setAuthState({
             loggedIn: true,
+            id: user.id,
             email: user.email,
             name: user.name,
             avatar: user.avatar
           });
+          console.log('Get Profile');
         })
         .catch((err) => {
           setAuthState({ loggedIn: false });

@@ -28,11 +28,11 @@ const Overview = Loader(lazy(() => import('content/overview')));
 
 // Dashboards
 
-const Crypto = Loader(lazy(() => import('content/dashboards/Crypto')));
+const Balance = Loader(lazy(() => import('content/dashboards/Balance')));
 
 // Applications
 
-const Messenger = Loader(lazy(() => import('content/applications/Messenger')));
+const Trading = Loader(lazy(() => import('content/dashboards/Trading')));
 const Transactions = Loader(
   lazy(() => import('content/applications/Transactions'))
 );
@@ -124,15 +124,15 @@ export const getRoutes = (isPrivate?: boolean): Array<RouteObject> => {
       children: [
         {
           path: '',
-          element: <Navigate to="crypto" replace />
+          element: <Navigate to="balance" replace />
         },
         {
-          path: 'crypto',
-          element: <Crypto />
+          path: 'balance',
+          element: <Balance />
         },
         {
-          path: 'messenger',
-          element: <Messenger />
+          path: 'trading',
+          element: <Trading />
         }
       ]
     },

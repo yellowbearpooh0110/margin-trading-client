@@ -14,6 +14,25 @@ namespace AxiosService {
     axios
       .get<{ user: UserProfileType }>('/user/profile')
       .then((res) => res.data.user);
+
+  export const authenticateUser = (data: { email: string; password: string }) =>
+    axios
+      .post<{ user: UserProfileType }>('/auth/login', data)
+      .then((res) => res.data.user);
+
+  export type UserBalanceType = {
+    id: string;
+    btc: number;
+    eth: number;
+    bnb: number;
+    usdt: number;
+    user_id: string;
+  };
+
+  export const getUserBalance = () =>
+    axios
+      .get<{ asset: UserBalanceType }>('/asset/balance')
+      .then((res) => res.data.asset);
 }
 
 export default AxiosService;

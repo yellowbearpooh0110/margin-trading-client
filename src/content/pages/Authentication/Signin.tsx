@@ -6,10 +6,19 @@ import {
   Container,
   Button,
   FormControl,
-  Dialog
+  Dialog,
+  IconButton,
+  InputAdornment,
+  TextField,
+  FormGroup
 } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import { Google as GoogleIcon } from '@mui/icons-material';
+import {
+  Email as EmailIcon,
+  Key as KeyIcon,
+  Google as GoogleIcon,
+  Visibility as VisibilityIcon
+} from '@mui/icons-material';
 
 import { styled } from '@mui/material/styles';
 import { Stack } from '@mui/system';
@@ -18,6 +27,7 @@ import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from 'providers/AuthProvider';
 import { apiUrl } from 'config';
+import AxiosService from 'services/axios';
 
 const MainContent = styled(Box)(
   ({ theme }) => `
@@ -65,73 +75,73 @@ const Signin: React.FC = () => {
           </Box>
           <Container maxWidth="sm">
             <Card sx={{ textAlign: 'center', mt: 3, p: [1, 4] }}>
-              <FormControl variant="outlined" fullWidth>
-                {/* <Stack spacing={2}>
-                  <TextField
-                    required
-                    id="outlined-required"
-                    label="Email"
-                    inputProps={{
-                      style: { paddingLeft: 50, marginLeft: -44 }
-                    }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start" sx={{ zIndex: 1 }}>
-                          <EmailIcon />
-                        </InputAdornment>
-                      ),
-                      style: { paddingLeft: 12 }
-                    }}
-                  />
-                  <TextField
-                    required
-                    id="outlined-password"
-                    label="Password"
-                    type="password"
-                    autoComplete="current-password"
-                    inputProps={{
-                      style: { paddingLeft: 50, marginLeft: -44 }
-                    }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start" sx={{ zIndex: 1 }}>
-                          <KeyIcon />
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <IconButton sx={{ marginLeft: '-40px' }}>
-                          <VisibilityIcon />
-                        </IconButton>
-                      ),
-                      style: { paddingRight: 0, paddingLeft: 12 }
-                    }}
-                  />
-                  <Button variant="outlined">Sign in</Button>
-                </Stack> */}
-                <Button variant="outlined" href={`${apiUrl}oauth/google`}>
-                  <GoogleIcon sx={{ mr: 1 }} />
-                  Sign In With Google
-                </Button>
-                <Button
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setOpen((_prev) => !_prev);
-                  }}
-                >
-                  Test
-                </Button>
-                <Dialog
-                  keepMounted
-                  maxWidth="sm"
-                  fullWidth
-                  open={open}
-                  onClose={() => {
-                    setOpen(false);
-                  }}
-                >
-                  Test
-                </Dialog>
-              </FormControl>
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  const formData = new FormData(event.currentTarget);
+                  const email = formData.get('email') as string;
+                  const password = formData.get('password') as string;
+                  AxiosService.authenticateUser({ email, password })
+                    .then((res) => {
+                      console.log(res);
+                    })
+                    .catch((err) => {
+                      console.error(err);
+                    });
+                  // console.log({ email, password });
+                }}
+              >
+                <FormControl variant="outlined" fullWidth>
+                  {/* <Stack spacing={2}>
+                    <TextField
+                      required
+                      name="email"
+                      label="Email"
+                      inputProps={{
+                        style: { paddingLeft: 50, marginLeft: -44 }
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start" sx={{ zIndex: 1 }}>
+                            <EmailIcon />
+                          </InputAdornment>
+                        ),
+                        style: { paddingLeft: 12 }
+                      }}
+                    />
+                    <TextField
+                      required
+                      name="password"
+                      label="Password"
+                      type="password"
+                      autoComplete="current-password"
+                      inputProps={{
+                        style: { paddingLeft: 50, marginLeft: -44 }
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start" sx={{ zIndex: 1 }}>
+                            <KeyIcon />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <IconButton sx={{ marginLeft: '-40px' }}>
+                            <VisibilityIcon />
+                          </IconButton>
+                        ),
+                        style: { paddingRight: 0, paddingLeft: 12 }
+                      }}
+                    />
+                    <Button type="submit" variant="outlined">
+                      Sign in
+                    </Button>
+                  </Stack> */}
+                  <Button variant="outlined" href={`${apiUrl}oauth/google`}>
+                    <GoogleIcon sx={{ mr: 1 }} />
+                    Sign In With Google
+                  </Button>
+                </FormControl>
+              </form>
             </Card>
           </Container>
         </Container>
