@@ -19,33 +19,12 @@ import AxiosService from 'services/axios';
 import Select, { components, OptionProps, ControlProps } from 'react-select';
 import { useSocket } from 'providers/SocketProvider';
 import { useAuth } from 'providers/AuthProvider';
-
-type SelectOptionType<T = string> = {
-  value: T;
-  label: string;
-  type?: 'network' | 'coin';
-};
-
-type NetworkType = 'ethereum' | 'binance' | 'avalanche';
-
-const networkOptions: Array<SelectOptionType<NetworkType>> = [
-  { value: 'ethereum', label: 'Ethereum Mainnet' },
-  { value: 'binance', label: 'Binance Smart Chain' },
-  { value: 'avalanche', label: 'Avalanche C-Chain' }
-];
-
-const coinOptions: { [key in NetworkType]: Array<SelectOptionType> } = {
-  ethereum: [
-    { value: 'eth', label: 'Ether', type: 'coin' },
-    { value: 'usdt', label: 'Tether USD', type: 'coin' },
-    { value: 'dai', label: 'Dai Stablecoin', type: 'coin' }
-  ],
-  binance: [
-    { value: 'bnb', label: 'BNB', type: 'coin' },
-    { value: 'usdt', label: 'Tether USD', type: 'coin' }
-  ],
-  avalanche: [{ value: 'avax', label: 'AVAX', type: 'coin' }]
-};
+import {
+  SelectOptionType,
+  NetworkType,
+  networkOptions,
+  coinOptions
+} from 'utils';
 
 const NetworkListItemAvatarWrapper = styled(ListItemAvatar)(
   ({ theme }) => `

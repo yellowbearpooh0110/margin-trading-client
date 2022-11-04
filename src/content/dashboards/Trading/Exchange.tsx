@@ -1,5 +1,14 @@
 import * as React from 'react';
 import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
+import {
   alpha,
   styled,
   Button,
@@ -9,43 +18,41 @@ import {
   Typography,
   useTheme,
   ListItemAvatar,
-  TextField
+  TextField,
+  CircularProgress
 } from '@mui/material';
-import TrendingUp from '@mui/icons-material/TrendingUp';
-import Text from 'components/Text';
-import Chart from 'react-apexcharts';
-import type { ApexOptions } from 'apexcharts';
+
 import AxiosService from 'services/axios';
 import Select, { components, OptionProps, ControlProps } from 'react-select';
 import { useSocket } from 'providers/SocketProvider';
 import { useAuth } from 'providers/AuthProvider';
+import {
+  SelectOptionType,
+  NetworkType,
+  networkOptions,
+  coinOptions,
+  CoinSelectOptionType,
+  mergeTwoSortedArray2OneSorted
+} from 'utils';
 
-type SelectOptionType<T = string> = {
-  value: T;
-  label: string;
-  type?: 'network' | 'coin';
-};
-
-type NetworkType = 'ethereum' | 'binance' | 'avalanche';
-
-const networkOptions: Array<SelectOptionType<NetworkType>> = [
-  { value: 'ethereum', label: 'Ethereum Mainnet' },
-  { value: 'binance', label: 'Binance Smart Chain' },
-  { value: 'avalanche', label: 'Avalanche C-Chain' }
+const data = [
+  {
+    name: 1667484411966,
+    uv: 4000
+  },
+  {
+    name: 1667484412066,
+    uv: 5000
+  },
+  {
+    name: 1667484412166,
+    uv: 3000
+  },
+  {
+    name: 1667484412266,
+    uv: 6000
+  }
 ];
-
-const coinOptions: { [key in NetworkType]: Array<SelectOptionType> } = {
-  ethereum: [
-    { value: 'eth', label: 'Ether', type: 'coin' },
-    { value: 'usdt', label: 'Tether USD', type: 'coin' },
-    { value: 'dai', label: 'Dai Stablecoin', type: 'coin' }
-  ],
-  binance: [
-    { value: 'bnb', label: 'BNB', type: 'coin' },
-    { value: 'usdt', label: 'Tether USD', type: 'coin' }
-  ],
-  avalanche: [{ value: 'avax', label: 'AVAX', type: 'coin' }]
-};
 
 const NetworkListItemAvatarWrapper = styled(ListItemAvatar)(
   ({ theme }) => `
@@ -191,17 +198,36 @@ const Exchange: React.FC = () => {
   const { socket } = useSocket();
   const { authState } = useAuth();
 
-  const [network, setNetwork] = React.useState<SelectOptionType<NetworkType>>(
-    networkOptions[0]
-  );
-  const [coin, setCoin] = React.useState<SelectOptionType>(
+  const [firstNetwork, setFirstNetwork] = React.useState<
+    SelectOptionType<NetworkType>
+  >(networkOptions[0]);
+  const [firstCoin, setFirstCoin] = React.useState<CoinSelectOptionType>(
     coinOptions.ethereum[0]
   );
+  const [secondNetwork, setSecondNetwork] = React.useState<
+    SelectOptionType<NetworkType>
+  >(networkOptions[0]);
+  const [secondCoin, setSecondCoin] = React.useState<CoinSelectOptionType>(
+    coinOptions.ethereum[0]
+  );
+
+  const [firstCoinPriceData, setFirstCoinPriceData] = React.useState<
+    Array<[number, number]>
+  >([]);
+
+  const [secondCoinPriceData, setSecondCoinPriceData] = React.useState<
+    Array<[number, number]>
+  >([]);
+
   const [amount, setAmount] = React.useState<number>(0);
 
   React.useEffect(() => {
-    setCoin(coinOptions[network.value][0]);
-  }, [network]);
+    setFirstCoin(coinOptions[firstNetwork.value][0]);
+  }, [firstNetwork]);
+
+  React.useEffect(() => {
+    setSecondCoin(coinOptions[secondNetwork.value][0]);
+  }, [secondNetwork]);
 
   const handleDeposit = React.useCallback(
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -212,14 +238,33 @@ const Exchange: React.FC = () => {
     },
     [socket]
   );
+
   React.useEffect(() => {
-    const listener = socket.on('success', () => {
-      console.log('success');
+    setFirstCoinPriceData([]);
+    AxiosService.getMarketChart(firstCoin.coin_id).then((res) => {
+      setFirstCoinPriceData(res.prices);
     });
-    return () => {
-      listener.removeListener();
-    };
-  }, [socket]);
+  }, [firstCoin]);
+
+  React.useEffect(() => {
+    setSecondCoinPriceData([]);
+    AxiosService.getMarketChart(secondCoin.coin_id).then((res) => {
+      setSecondCoinPriceData(res.prices);
+    });
+  }, [secondCoin]);
+
+  const timeRange = React.useMemo(
+    () =>
+      mergeTwoSortedArray2OneSorted(
+        firstCoinPriceData.map((_price) => _price[0]),
+        secondCoinPriceData.map((_price) => _price[0])
+      ),
+    [firstCoinPriceData, secondCoinPriceData]
+  );
+
+  React.useEffect(() => {
+    console.log(timeRange);
+  }, [timeRange]);
 
   return (
     <Card>
@@ -234,8 +279,10 @@ const Exchange: React.FC = () => {
             Choose Network
           </Typography>
           <Select
-            value={network}
-            onChange={(val) => setNetwork(val as SelectOptionType<NetworkType>)}
+            value={firstNetwork}
+            onChange={(val) =>
+              setFirstNetwork(val as SelectOptionType<NetworkType>)
+            }
             options={networkOptions}
             components={{ Option: NetworkOption, Control: NetworkControl }}
             menuPortalTarget={document.body}
@@ -247,9 +294,9 @@ const Exchange: React.FC = () => {
             Choose Coin
           </Typography>
           <Select
-            value={coin}
-            onChange={(val) => setCoin(val as SelectOptionType)}
-            options={coinOptions[network.value]}
+            value={firstCoin}
+            onChange={(val) => setFirstCoin(val as CoinSelectOptionType)}
+            options={coinOptions[firstNetwork.value]}
             components={{ Option: CoinOption, Control: CoinControl }}
             menuPortalTarget={document.body}
             styles={{ menuPortal: (base) => ({ ...base, zIndex: 999 }) }}
@@ -271,8 +318,159 @@ const Exchange: React.FC = () => {
             label="Amount"
             type="number"
             fullWidth
-            InputProps={{ endAdornment: coin.value.toUpperCase() }}
+            InputProps={{ endAdornment: firstCoin.value.toUpperCase() }}
           />
+        </Grid>
+        {firstCoinPriceData.length > 0 && (
+          <Grid item xs={12} height={500}>
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                width={500}
+                height={400}
+                data={firstCoinPriceData}
+                margin={{
+                  top: 10,
+                  right: 30,
+                  left: 0,
+                  bottom: 0
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="0"
+                  minTickGap={30}
+                  tickFormatter={(_name) =>
+                    new Date(_name).toLocaleDateString(undefined, {
+                      day: 'numeric',
+                      month: 'numeric'
+                    })
+                  }
+                />
+                <YAxis
+                  domain={[
+                    (dataMin) => Math.floor(dataMin * 50) / 50,
+                    (dataMax) => Math.ceil(dataMax * 50) / 50
+                  ]}
+                />
+                <Tooltip
+                  itemStyle={{ color: '#19032d' }}
+                  labelStyle={{ color: 'gray' }}
+                  formatter={(_value, _name) => [`${_value} USD`, 'Price']}
+                  labelFormatter={(_label) => new Date(_label).toLocaleString()}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="1"
+                  stroke="#689f38"
+                  fill="#689f38"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </Grid>
+        )}
+        <Grid item xs={12} md={6}>
+          <Typography sx={{ pb: 1 }} variant="h4">
+            Choose Network
+          </Typography>
+          <Select
+            value={secondNetwork}
+            onChange={(val) =>
+              setSecondNetwork(val as SelectOptionType<NetworkType>)
+            }
+            options={networkOptions}
+            components={{ Option: NetworkOption, Control: NetworkControl }}
+            menuPortalTarget={document.body}
+            styles={{ menuPortal: (base) => ({ ...base, zIndex: 999 }) }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography sx={{ pb: 1 }} variant="h4">
+            Choose Coin
+          </Typography>
+          <Select
+            value={secondCoin}
+            onChange={(val) => setSecondCoin(val as CoinSelectOptionType)}
+            options={coinOptions[secondNetwork.value]}
+            components={{ Option: CoinOption, Control: CoinControl }}
+            menuPortalTarget={document.body}
+            styles={{ menuPortal: (base) => ({ ...base, zIndex: 999 }) }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography sx={{ pb: 1 }} variant="h4">
+            Input Amount
+          </Typography>
+          <TextField
+            value={amount}
+            onChange={(event) => {
+              event.preventDefault();
+              // const _val = Number(event.currentTarget.value);
+              // if (Number.isNaN(_val)) return;
+              // else setAmount(_val);
+              setAmount(Number(event.currentTarget.value));
+            }}
+            label="Amount"
+            type="number"
+            fullWidth
+            InputProps={{ endAdornment: secondCoin.value.toUpperCase() }}
+          />
+        </Grid>
+        <Grid item xs={12} height={500}>
+          {secondCoinPriceData.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                width={500}
+                height={400}
+                data={secondCoinPriceData}
+                margin={{
+                  top: 10,
+                  right: 30,
+                  left: 0,
+                  bottom: 0
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="0"
+                  minTickGap={30}
+                  tickFormatter={(_name) =>
+                    new Date(_name).toLocaleDateString(undefined, {
+                      day: 'numeric',
+                      month: 'numeric'
+                    })
+                  }
+                />
+                <YAxis
+                  domain={[
+                    (dataMin) => Math.floor(dataMin * 50) / 50,
+                    (dataMax) => Math.ceil(dataMax * 50) / 50
+                  ]}
+                />
+                <Tooltip
+                  itemStyle={{ color: '#19032d' }}
+                  labelStyle={{ color: 'gray' }}
+                  formatter={(_value, _name) => [`${_value} USD`, 'Price']}
+                  labelFormatter={(_label) => new Date(_label).toLocaleString()}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="1"
+                  stroke="#689f38"
+                  fill="#689f38"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              height="100%"
+            >
+              <CircularProgress size={64} disableShrink thickness={3} />
+            </Box>
+          )}
         </Grid>
         <Grid item xs={12}>
           <Button

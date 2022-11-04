@@ -94,13 +94,13 @@ function WatchListColumn() {
     ],
     xaxis: {
       labels: {
-        show: false
+        show: true
       },
       axisBorder: {
-        show: false
+        show: true
       },
       axisTicks: {
-        show: false
+        show: true
       }
     },
     yaxis: {

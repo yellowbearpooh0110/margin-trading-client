@@ -6,6 +6,7 @@ import Footer from 'components/Footer';
 
 import AccountBalance from './AccountBalance';
 import Deposit from './Deposit';
+import WatchList from './WatchList';
 
 function DashboardBalance() {
   return (
@@ -35,10 +36,10 @@ function DashboardBalance() {
           </Grid>
           <Grid item lg={4} xs={12}>
             <AccountSecurity />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12}>
             <WatchList />
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
       <Footer />
